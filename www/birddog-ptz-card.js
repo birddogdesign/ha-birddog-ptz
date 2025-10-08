@@ -330,7 +330,89 @@ class BirdDogPTZCard extends HTMLElement {
       </style>
       
       <div class="card">
-        <div class="card-header">${this.config.name}</div>
+        <div class="input-group">
+          <label for="button_color">Button Color (Hex, e.g., #3498DB)</label>
+          <input
+            id="button_color"
+            type="text"
+            value="${this._config.button_color || ''}"
+            placeholder="#3498DB"
+            ${this._config.use_theme_colors !== false ? 'disabled' : ''}
+          />
+        </div>
+      </div>
+    `;
+    
+    this.shadowRoot.getElementById('name').addEventListener('change', (e) => this._valueChanged(e, 'name'));
+    this.shadowRoot.getElementById('host').addEventListener('change', (e) => this._valueChanged(e, 'host'));
+    this.shadowRoot.getElementById('port').addEventListener('change', (e) => this._valueChanged(e, 'port'));
+    this.shadowRoot.getElementById('show_joystick').addEventListener('change', (e) => this._checkboxChanged(e, 'show_joystick'));
+    this.shadowRoot.getElementById('show_speed_controls').addEventListener('change', (e) => this._checkboxChanged(e, 'show_speed_controls'));
+    this.shadowRoot.getElementById('show_zoom_focus').addEventListener('change', (e) => this._checkboxChanged(e, 'show_zoom_focus'));
+    this.shadowRoot.getElementById('use_theme_colors').addEventListener('change', (e) => {
+      this._checkboxChanged(e, 'use_theme_colors');
+      const joystickInput = this.shadowRoot.getElementById('joystick_color');
+      const buttonInput = this.shadowRoot.getElementById('button_color');
+      if (e.target.checked) {
+        joystickInput.disabled = true;
+        buttonInput.disabled = true;
+      } else {
+        joystickInput.disabled = false;
+        buttonInput.disabled = false;
+      }
+    });
+    this.shadowRoot.getElementById('joystick_color').addEventListener('change', (e) => this._valueChanged(e, 'joystick_color'));
+    this.shadowRoot.getElementById('button_color').addEventListener('change', (e) => this._valueChanged(e, 'button_color'));
+  }
+
+  _valueChanged(ev, configKey) {
+    if (!this._config) {
+      return;
+    }
+    
+    const value = ev.target.value;
+    
+    this._config = {
+      ...this._config,
+      [configKey]: configKey === 'port' ? parseInt(value) || 52381 : value
+    };
+    
+    this._fireEvent();
+  }
+
+  _checkboxChanged(ev, configKey) {
+    if (!this._config) {
+      return;
+    }
+    
+    this._config = {
+      ...this._config,
+      [configKey]: ev.target.checked
+    };
+    
+    this._fireEvent();
+  }
+
+  _fireEvent() {
+    const event = new CustomEvent('config-changed', {
+      detail: { config: this._config },
+      bubbles: true,
+      composed: true
+    });
+    this.dispatchEvent(event);
+  }
+}
+
+customElements.define('birddog-ptz-card', BirdDogPTZCard);
+customElements.define('birddog-ptz-card-editor', BirdDogPTZCardEditor);
+
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: 'birddog-ptz-card',
+  name: 'BirdDog PTZ Control',
+  description: 'Interactive joystick PTZ control for BirdDog cameras',
+  preview: true
+}); class="card-header">${this.config.name}</div>
         
         <div class="controls">
           <div class="joystick-container">
@@ -839,86 +921,4 @@ class BirdDogPTZCardEditor extends HTMLElement {
           />
         </div>
         
-        <div class="input-group">
-          <label for="button_color">Button Color (Hex, e.g., #3498DB)</label>
-          <input
-            id="button_color"
-            type="text"
-            value="${this._config.button_color || ''}"
-            placeholder="#3498DB"
-            ${this._config.use_theme_colors !== false ? 'disabled' : ''}
-          />
-        </div>
-      </div>
-    `;
-    
-    this.shadowRoot.getElementById('name').addEventListener('change', (e) => this._valueChanged(e, 'name'));
-    this.shadowRoot.getElementById('host').addEventListener('change', (e) => this._valueChanged(e, 'host'));
-    this.shadowRoot.getElementById('port').addEventListener('change', (e) => this._valueChanged(e, 'port'));
-    this.shadowRoot.getElementById('show_joystick').addEventListener('change', (e) => this._checkboxChanged(e, 'show_joystick'));
-    this.shadowRoot.getElementById('show_speed_controls').addEventListener('change', (e) => this._checkboxChanged(e, 'show_speed_controls'));
-    this.shadowRoot.getElementById('show_zoom_focus').addEventListener('change', (e) => this._checkboxChanged(e, 'show_zoom_focus'));
-    this.shadowRoot.getElementById('use_theme_colors').addEventListener('change', (e) => {
-      this._checkboxChanged(e, 'use_theme_colors');
-      const joystickInput = this.shadowRoot.getElementById('joystick_color');
-      const buttonInput = this.shadowRoot.getElementById('button_color');
-      if (e.target.checked) {
-        joystickInput.disabled = true;
-        buttonInput.disabled = true;
-      } else {
-        joystickInput.disabled = false;
-        buttonInput.disabled = false;
-      }
-    });
-    this.shadowRoot.getElementById('joystick_color').addEventListener('change', (e) => this._valueChanged(e, 'joystick_color'));
-    this.shadowRoot.getElementById('button_color').addEventListener('change', (e) => this._valueChanged(e, 'button_color'));
-  }
-
-  _valueChanged(ev, configKey) {
-    if (!this._config) {
-      return;
-    }
-    
-    const value = ev.target.value;
-    
-    this._config = {
-      ...this._config,
-      [configKey]: configKey === 'port' ? parseInt(value) || 52381 : value
-    };
-    
-    this._fireEvent();
-  }
-
-  _checkboxChanged(ev, configKey) {
-    if (!this._config) {
-      return;
-    }
-    
-    this._config = {
-      ...this._config,
-      [configKey]: ev.target.checked
-    };
-    
-    this._fireEvent();
-  }
-
-  _fireEvent() {
-    const event = new CustomEvent('config-changed', {
-      detail: { config: this._config },
-      bubbles: true,
-      composed: true
-    });
-    this.dispatchEvent(event);
-  }
-}
-
-customElements.define('birddog-ptz-card', BirdDogPTZCard);
-customElements.define('birddog-ptz-card-editor', BirdDogPTZCardEditor);
-
-window.customCards = window.customCards || [];
-window.customCards.push({
-  type: 'birddog-ptz-card',
-  name: 'BirdDog PTZ Control',
-  description: 'Interactive joystick PTZ control for BirdDog cameras',
-  preview: true
-});
+        <div
