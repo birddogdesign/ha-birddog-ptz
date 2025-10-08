@@ -1,0 +1,224 @@
+pan_tilt:
+  name: Pan and Tilt
+  description: Move camera with specified pan and tilt speeds
+  fields:
+    host:
+      name: Camera IP
+      description: IP address of the camera
+      required: true
+      example: "192.168.1.100"
+      selector:
+        text:
+    port:
+      name: VISCA Port
+      description: VISCA port (default 52381)
+      required: false
+      default: 52381
+      selector:
+        number:
+          min: 1
+          max: 65535
+    pan:
+      name: Pan Speed
+      description: Pan speed (-100 to 100)
+      required: true
+      selector:
+        number:
+          min: -100
+          max: 100
+          mode: slider
+    tilt:
+      name: Tilt Speed
+      description: Tilt speed (-100 to 100)
+      required: true
+      selector:
+        number:
+          min: -100
+          max: 100
+          mode: slider
+
+stop:
+  name: Stop Movement
+  description: Stop all camera movement
+  fields:
+    host:
+      name: Camera IP
+      required: true
+      selector:
+        text:
+    port:
+      name: VISCA Port
+      required: false
+      default: 52381
+      selector:
+        number:
+          min: 1
+          max: 65535
+
+zoom_in:
+  name: Zoom In
+  description: Start zooming in
+  fields:
+    host:
+      name: Camera IP
+      required: true
+      selector:
+        text:
+    port:
+      name: VISCA Port
+      required: false
+      default: 52381
+      selector:
+        number:
+          min: 1
+          max: 65535
+    speed:
+      name: Zoom Speed
+      description: Speed 0-7
+      required: false
+      default: 5
+      selector:
+        number:
+          min: 0
+          max: 7
+          mode: slider
+
+zoom_out:
+  name: Zoom Out
+  description: Start zooming out
+  fields:
+    host:
+      name: Camera IP
+      required: true
+      selector:
+        text:
+    port:
+      name: VISCA Port
+      required: false
+      default: 52381
+      selector:
+        number:
+          min: 1
+          max: 65535
+    speed:
+      name: Zoom Speed
+      description: Speed 0-7
+      required: false
+      default: 5
+      selector:
+        number:
+          min: 0
+          max: 7
+          mode: slider
+
+zoom_in_stop:
+  name: Stop Zoom In
+  description: Stop zooming
+  fields:
+    host:
+      name: Camera IP
+      required: true
+      selector:
+        text:
+    port:
+      name: VISCA Port
+      required: false
+      default: 52381
+
+zoom_out_stop:
+  name: Stop Zoom Out
+  description: Stop zooming
+  fields:
+    host:
+      name: Camera IP
+      required: true
+      selector:
+        text:
+    port:
+      name: VISCA Port
+      required: false
+      default: 52381
+
+focus_near:
+  name: Focus Near
+  description: Start focusing near
+  fields:
+    host:
+      name: Camera IP
+      required: true
+      selector:
+        text:
+    port:
+      name: VISCA Port
+      required: false
+      default: 52381
+      selector:
+        number:
+          min: 1
+          max: 65535
+    speed:
+      name: Focus Speed
+      description: Speed 0-7
+      required: false
+      default: 5
+      selector:
+        number:
+          min: 0
+          max: 7
+          mode: slider
+
+focus_far:
+  name: Focus Far
+  description: Start focusing far
+  fields:
+    host:
+      name: Camera IP
+      required: true
+      selector:
+        text:
+    port:
+      name: VISCA Port
+      required: false
+      default: 52381
+      selector:
+        number:
+          min: 1
+          max: 65535
+    speed:
+      name: Focus Speed
+      description: Speed 0-7
+      required: false
+      default: 5
+      selector:
+        number:
+          min: 0
+          max: 7
+          mode: slider
+
+focus_near_stop:
+  name: Stop Focus Near
+  description: Stop focusing
+  fields:
+    host:
+      name: Camera IP
+      required: true
+      selector:
+        text:
+    port:
+      name: VISCA Port
+      required: false
+      default: 52381
+
+focus_far_stop:
+  name: Stop Focus Far
+  description: Stop focusing
+  fields:
+    host:
+      name: Camera IP
+      required: true
+      selector:
+        text:
+    port:
+      name: VISCA Port
+      required: false
+      default: 52381
